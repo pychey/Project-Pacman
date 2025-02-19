@@ -64,6 +64,13 @@ public class Map {
             System.out.println("Invalid move! Please use W, A, S, or D.");
         }
     }
+    public boolean isFoodEaten(int x, int y){
+        if(grid[x][y] == '.'){
+            grid[x][y] = ' ';
+            foodCount--;
+        }
+        return true;
+    }
 
 
     public void printMap() {
