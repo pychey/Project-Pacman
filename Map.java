@@ -53,13 +53,13 @@ public class Map {
             placePacman(pacman.x, pacman.y);
         }else if(move == 's'){
             pacman.moveDown();
-            placeGhost(pacman.x, pacman.y);
+            placePacman(pacman.x, pacman.y);
         }else if(move == 'a'){
             pacman.moveLeft();
-            placeGhost(pacman.x, pacman.y);
+            placePacman(pacman.x, pacman.y);
         }else if(move == 'd'){
             pacman.moveRight();
-            placeGhost(pacman.x, pacman.y);
+            placePacman(pacman.x, pacman.y);
         }else{
             System.out.println("Invalid move! Please use W, A, S, or D.");
         }
@@ -68,6 +68,7 @@ public class Map {
         if(grid[x][y] == '.'){
             grid[x][y] = ' ';
             foodCount--;
+            return false;
         }
         return true;
     }
