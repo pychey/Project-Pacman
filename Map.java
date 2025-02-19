@@ -41,4 +41,13 @@ public class Map {
             }
         }
     }
+    public void printMap() {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                System.out.print(grid[i][j] + " "); // Print each character with a space
+            }
+            System.out.println(); // New line after each row
+        }
+        System.out.println(); // Extra line for spacing
+    }
 }
