@@ -6,6 +6,9 @@ public abstract  class Character implements Movable {
     public char symbol;
     public String name;
 
+    public int getX() { return x; }
+    public int getY() { return y; }
+    public char getSymbol() { return symbol; }
 
 
 

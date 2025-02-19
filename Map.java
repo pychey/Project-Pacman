@@ -19,4 +19,7 @@ public class Map {
     public boolean isWithinBound(int x, int y){
         return (x >= 0 && x < width) && (y >= 0 && y < height);
     }
+    public void placeCharacter(Character character) {
+         grid[character.getY()][character.getX()] = character.getSymbol();
+    }
 }
