@@ -31,6 +31,11 @@ public class Map {
             grid[x][y] = 'G';
         }
     }
+    
+    public void clearCharacter(int x, int y){
+        grid[x][y] = ' ';
+    }
+
     public void generateFood(){
         for(int i=0; i<height; i++){
             for(int j=0; j<width; j++){
@@ -41,7 +46,24 @@ public class Map {
             }
         }
     }
-
+    public void movePacman(char move, Pacman pacman){
+        clearCharacter(pacman.x, pacman.y);
+        if(move == 'w'){
+            pacman.moveUp();
+            placePacman(pacman.x, pacman.y);
+        }else if(move == 's'){
+            pacman.moveDown();
+            placeGhost(pacman.x, pacman.y);
+        }else if(move == 'a'){
+            pacman.moveLeft();
+            placeGhost(pacman.x, pacman.y);
+        }else if(move == 'd'){
+            pacman.moveRight();
+            placeGhost(pacman.x, pacman.y);
+        }else{
+            System.out.println("Invalid move! Please use W, A, S, or D.");
+        }
+    }
 
 
     public void printMap() {
