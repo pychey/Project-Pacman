@@ -22,12 +22,12 @@ public class Map {
         return (x >= 0 && x < width) && (y >= 0 && y < height);
     }
     public void placePacman(int x, int y){
-        if(grid[x][y] != 'x'){
+        if(grid[x][y] != 'x' && isWithinBound(x, y)){
             grid[x][y] = 'P';
         }
     }
     public void placeGhost(int x, int y){
-        if(grid[x][y] != 'x'){
+        if(grid[x][y] != 'x' && isWithinBound(x, y)){
             grid[x][y] = 'G';
         }
     }
