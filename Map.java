@@ -1,5 +1,6 @@
 public class Map {
     public int width,height;
+    public int foodCount = 0;
     public char[][] grid = {
         {'x','x','x','x','x','x','x','x','x','x','x'},
         {'x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'},
@@ -12,6 +13,7 @@ public class Map {
         {'x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'},
         {'x','x','x','x','x','x','x','x','x','x','x'}
     };
+
     Map() {
         height = grid.length;
         width = grid[0].length;
@@ -19,7 +21,24 @@ public class Map {
     public boolean isWithinBound(int x, int y){
         return (x >= 0 && x < width) && (y >= 0 && y < height);
     }
-    public void placeCharacter(Character character) {
-         grid[character.getY()][character.getX()] = character.getSymbol();
+    public void placePacman(int x, int y){
+        if(grid[x][y] != 'x'){
+            grid[x][y] = 'P';
+        }
+    }
+    public void placeGhost(int x, int y){
+        if(grid[x][y] != 'x'){
+            grid[x][y] = 'G';
+        }
+    }
+    public void generateFood(){
+        for(int i=0; i<height; i++){
+            for(int j=0; j<width; j++){
+                if(grid[i][j] == ' '){
+                    grid[i][j] = '.';
+                    foodCount++;
+                }
+            }
+        }
     }
 }
