@@ -2,14 +2,16 @@ public class Game {
 
     public Game() {
 
-        
+
 
     }
 
-    
+    //Create map object
+    Map map= new Map();
+
 
     public void startGame(){
-        System.err.println("Game Started");
+        map.printMap();
     }
 
 
