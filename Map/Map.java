@@ -1,3 +1,6 @@
+package Map;
+import Entity.Pacman;
+
 public class Map {
     public int width,height;
     public int foodCount = 0;
@@ -14,7 +17,7 @@ public class Map {
         {'x','x','x','x','x','x','x','x','x','x','x'}
     };
 
-    Map() {
+    public Map() {
         height = grid.length;
         width = grid[0].length;
     }

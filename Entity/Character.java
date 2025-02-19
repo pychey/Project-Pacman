@@ -1,4 +1,5 @@
-
+package Entity;
+import Interface.*;
 
 public abstract  class Character implements Movable {
 

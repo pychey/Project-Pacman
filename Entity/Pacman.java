@@ -1,7 +1,8 @@
+package Entity;
 
 
 public class Pacman extends Character{
-    int score = 0;
+    public int score = 0;
 
     public Pacman(int x, int y ){
         this.x = x;
