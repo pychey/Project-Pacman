@@ -1,6 +1,8 @@
+
 import java.util.Scanner;
 
 public class Game {
+    static int NumberOfGamePlayed = 0;
     Pacman pacman = new Pacman(1,1);
     Ghost ghosts[] = {
         new Ghost(1,2,"BlueGhost",'B'),
@@ -30,9 +32,6 @@ public class Game {
         while(true){
             System.out.print("\nEnter Move (w/s/a/d): ");
             char move = scanner.next().charAt(0);
-            if(map.isFoodEaten(pacman.x, pacman.y)){
-                pacman.score++;
-            }
             map.movePacman(move, pacman);
             map.printMap();
             System.out.println("\nScore: " + pacman.score);

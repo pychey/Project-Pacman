@@ -1,3 +1,5 @@
+
+
 public class Pacman extends Character{
     int score = 0;
 

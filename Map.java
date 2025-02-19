@@ -50,27 +50,27 @@ public class Map {
         clearCharacter(pacman.x, pacman.y);
         if(move == 'w'){
             pacman.moveUp();
-            placePacman(pacman.x, pacman.y);
         }else if(move == 's'){
             pacman.moveDown();
-            placePacman(pacman.x, pacman.y);
         }else if(move == 'a'){
             pacman.moveLeft();
-            placePacman(pacman.x, pacman.y);
         }else if(move == 'd'){
             pacman.moveRight();
-            placePacman(pacman.x, pacman.y);
         }else{
             System.out.println("Invalid move! Please use W, A, S, or D.");
         }
+        if(isFoodThere(pacman.x, pacman.y)){
+            pacman.score++;
+        }
+        placePacman(pacman.x, pacman.y);
     }
-    public boolean isFoodEaten(int x, int y){
+    public boolean isFoodThere(int x, int y){
         if(grid[x][y] == '.'){
             grid[x][y] = ' ';
             foodCount--;
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
 

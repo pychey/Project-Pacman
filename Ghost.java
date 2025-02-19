@@ -1,3 +1,4 @@
+package Character;
 public class Ghost extends Character{
 
     public Ghost(int x, int y, String name, char symbol){
