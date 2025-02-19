@@ -7,4 +7,9 @@ public class Ghost extends Character{
         this.name = name;
         this.symbol = symbol;
     }
+
+    @Override
+    public void sayName(){
+        System.out.println("I am " + name);
+    }
 }

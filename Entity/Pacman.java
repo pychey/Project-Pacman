@@ -10,4 +10,9 @@ public class Pacman extends Character{
         this.name = "Pacman";
         this.symbol = 'P';
     }
+
+    @Override
+    public void sayName(){
+        System.out.println("I am " + name);
+    }
 }
