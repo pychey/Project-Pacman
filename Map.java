@@ -21,7 +21,16 @@ public class Map {
     public boolean isWithinBound(int x, int y){
         return (x >= 0 && x < width) && (y >= 0 && y < height);
     }
-
+    public void placePacman(int x, int y){
+        if(grid[x][y] != 'x' && isWithinBound(x, y)){
+            grid[x][y] = 'P';
+        }
+    }
+    public void placeGhost(int x, int y){
+        if(grid[x][y] != 'x' && isWithinBound(x, y)){
+            grid[x][y] = 'G';
+        }
+    }
     public void generateFood(){
         for(int i=0; i<height; i++){
             for(int j=0; j<width; j++){

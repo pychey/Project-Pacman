@@ -6,9 +6,6 @@ public abstract  class Character implements Movable {
     public char symbol;
     public String name;
 
-
-
-
     @Override
     public void moveDown() {
         this.x++;
