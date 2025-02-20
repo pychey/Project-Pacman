@@ -1,11 +1,36 @@
 package Main;
+
+import java.util.Scanner;
+
 public class Main {
-
     public static void main(String[] args) {
-        Game game = new Game();
-        game.startGame();
+        Scanner scanner = new Scanner(System.in);
+        boolean gameQuit = false;
+        int opt;
+        do {
+            System.out.println("1.Play");
+            System.out.println("2.Practice");
+            System.out.println("3.Quit");
+            System.out.print("Enter : ");
+            opt = scanner.nextInt();
+            switch(opt){
+                case 1:
+                    Game game = new Game();
+                    game.runGame();
+                    break;
+                case 2:
+                    // Game game = new Game();
+                    break;
+                case 3:
+                    gameQuit = true;
+                    break;
+                default:
+                    System.out.println("Choose 1,2 or 3");
+                    break;
+            }
+        } while (!gameQuit);
+        scanner.close();
     }
-
 
 }
 

@@ -1,4 +1,6 @@
 package Entity;
+import Map.Map;
+
 public class Ghost extends Character{
 
     public Ghost(int x, int y, String name, char symbol){
@@ -10,6 +12,10 @@ public class Ghost extends Character{
 
     @Override
     public void sayName(){
-        System.out.println("I am " + name);
+        System.out.println("I am Ghost");
+    }
+
+    public void moveRandomly(Map map){
+        //
     }
 }
