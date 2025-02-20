@@ -36,16 +36,17 @@ public class Pacman extends Character{
                 default:
                     System.out.println("There's no such move");
             }
-            if(!map.isWall(x, y)) {
-                map.placePacman(x, y);
-            } else {
+
+            if(map.isWall(x, y)) {
                 x = oldX;
                 y = oldY;
                 map.placePacman(x, y);
             }
+
             if(map.isFoodThere(x, y)){
                 score++;
             }
+            map.placePacman(x, y);
         }
     
     public boolean collidesWithGhost(Ghost[] ghosts){
