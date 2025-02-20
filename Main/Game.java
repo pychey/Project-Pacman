@@ -1,10 +1,9 @@
-package Main;
+package main;
 
+import entity.Ghost;
+import entity.Pacman;
 import java.util.Scanner;
-
-import Entity.Ghost;
-import Entity.Pacman;
-import Map.Map;
+import map.Map;
 
 public class Game {
     public static int NumberOfGamePlayed = 0;

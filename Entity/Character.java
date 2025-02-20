@@ -1,5 +1,5 @@
-package Entity;
-import Interface.*;
+package entity;
+import Interface.Movable;
 
 public abstract class Character implements Movable {
 

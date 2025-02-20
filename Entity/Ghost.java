@@ -1,5 +1,5 @@
-package Entity;
-import Map.Map;
+package entity;
+import map.Map;
 
 public class Ghost extends Character{
 
