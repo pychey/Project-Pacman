@@ -17,6 +17,8 @@ public class Pacman extends Character{
     }
 
     public void move(char direction,Map map){
+            int oldX = x;
+            int oldY = y;
             map.clearCharacter(x, y);
             switch (direction) {
                 case 'w':
@@ -34,10 +36,16 @@ public class Pacman extends Character{
                 default:
                     System.out.println("There's no such move");
             }
+            if(!map.isWall(x, y)) {
+                map.placePacman(x, y);
+            } else {
+                x = oldX;
+                y = oldY;
+                map.placePacman(x, y);
+            }
             if(map.isFoodThere(x, y)){
                 score++;
             }
-            map.placePacman(x, y);
         }
     
     public boolean collidesWithGhost(Ghost[] ghosts){
