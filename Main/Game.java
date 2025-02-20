@@ -25,7 +25,7 @@ public class Game {
         map.placePacman(pacman.x, pacman.y);
         for (Ghost ghost : ghosts) { map.placeGhost(ghost.x, ghost.y); }
         map.generateFood();
-        System.out.println("Welcome to Pacman Game: ");
+        System.out.println("\nWelcome to Pacman Game: ");
         while(gameRunning){
             map.printMap();
             System.out.println("\nScore: " + pacman.score);
@@ -39,7 +39,7 @@ public class Game {
                     pacman.move(move, map);
                     //map.moveGhosts(ghosts);
                     if(pacman.collidesWithGhost(ghosts)){
-                        System.out.println("Game Over!");
+                        System.out.println("\nGame Over!\n");
                         gameRunning = false;
                         break;
                     }

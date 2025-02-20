@@ -3,7 +3,7 @@ package map;
 public class Map {
     public int width,height;
     public int foodCount = 0;
-    public static char[][] grid1 = {
+    public static char[][] grid = {
         {'x','x','x','x','x','x','x','x','x','x','x'},
         {'x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'},
         {'x',' ','x',' ','x',' ','x',' ','x',' ','x'},
@@ -15,7 +15,6 @@ public class Map {
         {'x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'},
         {'x','x','x','x','x','x','x','x','x','x','x'}
     };
-    public char[][] grid = grid1;
 
     public Map() {
         height = grid.length;
@@ -72,12 +71,12 @@ public class Map {
 
 
     public void printMap() {
+        System.out.println();
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
                 System.out.print(grid[i][j] + " "); 
             }
             System.out.println();
         }
-        System.out.println();
     }
 }
