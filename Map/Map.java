@@ -3,7 +3,7 @@ package map;
 public class Map {
     public int width,height;
     public int foodCount = 0;
-    public static char[][] grid = {
+    public char[][] grid = {
         {'x','x','x','x','x','x','x','x','x','x','x'},
         {'x',' ',' ',' ',' ',' ',' ',' ',' ',' ','x'},
         {'x',' ','x',' ','x',' ','x',' ','x',' ','x'},
@@ -22,11 +22,23 @@ public class Map {
     }
 
     public boolean isWithinBound(int x, int y){
-        return (x >= 0 && x < width) && (y >= 0 && y < height);
+        return (x >= 0 && x < height) && (y >= 0 && y < width);
     }
 
     public boolean isWall(int x, int y){
         return grid[x][y] == 'x';
+    }
+
+    public boolean isPacman(int x, int y){
+        return grid[x][y] == 'P';
+    }
+
+    public boolean isGhost(int x, int y){
+        return grid[x][y] == 'G';
+    }
+
+    public char returnGrid(int x, int y){
+        return grid[x][y];
     }
 
     public void placePacman(int x, int y){
@@ -40,9 +52,19 @@ public class Map {
             grid[x][y] = 'G';
         }
     }
+
+    public void clearGhost(int x, int y, char lastGridOfGhost){
+        if(lastGridOfGhost == '.'){
+            grid[x][y] = '.';
+        } 
+        else grid[x][y] = ' ';
+    }
     
-    public void clearCharacter(int x, int y){
-        grid[x][y] = ' ';
+    public void clearPacman(int x, int y){
+        if(grid[x][y] == 'G'){
+            placeGhost(x, y);
+        }
+        else grid[x][y] = ' ';
     }
 
     public void generateFood(){

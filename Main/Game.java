@@ -8,23 +8,32 @@ import map.Map;
 public class Game {
     public static int NumberOfGamePlayed = 0;
     public boolean gameRunning = false;
-    Pacman pacman = new Pacman(1,1);
-    Ghost ghosts[] = {
-        new Ghost(1,2,"BlueGhost",'B'),
-        new Ghost(8,8,"OrangeGhost",'O')
-    };
+    Scanner scanner;
     Map map = new Map();
+    Pacman pacman;
+    Ghost[] ghosts;
 
-    public Game() {
+    public Game(Scanner mainScanner) {
+        this.scanner = mainScanner;
         gameRunning = true;
-        NumberOfGamePlayed += 1;
     };
+
+    public void initializePacmanRandomlyOnMap(){
+        pacman = new Pacman(map);
+    }
+
+    public void initializeGhostRandomlyOnMap(){
+        ghosts = new Ghost[] {
+            new Ghost("BlueGhost",'B',map),
+            new Ghost("RedGhost",'R',map)
+        };
+    }
 
     public void runGame(){
-        Scanner scanner = new Scanner(System.in);
-        map.placePacman(pacman.x, pacman.y);
-        for (Ghost ghost : ghosts) { map.placeGhost(ghost.x, ghost.y); }
+        NumberOfGamePlayed += 1;
+        initializePacmanRandomlyOnMap();
         map.generateFood();
+        initializeGhostRandomlyOnMap();
         System.out.println("\nWelcome to Pacman Game: ");
         while(gameRunning){
             map.printMap();
@@ -36,15 +45,17 @@ public class Game {
                 case 's':
                 case 'a':
                 case 'd':
+                    for (Ghost ghost : ghosts) {
+                        ghost.moveRandomly(map);
+                    }
                     pacman.move(move, map);
-                    //map.moveGhosts(ghosts);
                     if(pacman.collidesWithGhost(ghosts)){
-                        System.out.println("\nGame Over!\n");
+                        System.out.println("\nGame Over!");
                         gameRunning = false;
                         break;
                     }
                     if(map.areAllFoodEaten()){
-                        System.out.println("Congratulation! You've won!");
+                        System.out.println("\nCongratulation! You've won!");
                         gameRunning = false;
                         break;
                     }
@@ -54,8 +65,36 @@ public class Game {
                     break;
             }
         }
-        scanner.close();
     }
 
-
+    public void practice(){
+        initializePacmanRandomlyOnMap();
+        map.generateFood();
+        System.out.println("\nWelcome to Pacman Game Practice: ");
+        while(gameRunning){
+            map.printMap();
+            System.out.println("\nScore: " + pacman.score);
+            System.out.print("\nEnter Move (w/s/a/d/q to quit): ");
+            char move = scanner.next().charAt(0);
+            switch (move) {
+                case 'w':
+                case 's':
+                case 'a':
+                case 'd':
+                    pacman.move(move, map);
+                    if(map.areAllFoodEaten()){
+                        System.out.println("\nCongratulation! You've won!");
+                        gameRunning = false;
+                        break;
+                    }
+                    break;
+                case 'q':
+                    gameRunning = false;
+                    break;
+                default:
+                    System.out.println("Invalid Move!");
+                    break;
+            }
+        }
+    }
 }

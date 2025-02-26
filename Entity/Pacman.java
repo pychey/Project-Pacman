@@ -11,6 +11,16 @@ public class Pacman extends Character{
         this.symbol = 'P';
     }
 
+    public Pacman(Map map){
+        do {
+            x = (int)(Math.random() * (map.height -1));
+            y = (int)(Math.random() * (map.width -1));
+        } while(map.isWall(x,y) || map.isGhost(x,y));
+        map.placePacman(x,y);
+        this.name = "Pacman";
+        this.symbol = 'P';
+    }
+
     @Override
     public void sayName(){
         System.out.println("I am Pacman");
@@ -19,7 +29,7 @@ public class Pacman extends Character{
     public void move(char direction,Map map){
             int oldX = x;
             int oldY = y;
-            map.clearCharacter(x, y);
+            map.clearPacman(x, y);
             switch (direction) {
                 case 'w':
                     moveUp();
