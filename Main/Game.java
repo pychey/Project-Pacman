@@ -2,6 +2,8 @@ package main;
 
 import entity.Ghost;
 import entity.Pacman;
+import exception.NotMoveException;
+
 import java.util.Scanner;
 import map.Map;
 
@@ -17,6 +19,12 @@ public class Game {
         this.scanner = mainScanner;
         gameRunning = true;
     };
+
+    public void validateMove(char move){
+        if (move != 'w' && move != 'a' && move != 's' && move != 'd'){
+            throw new NotMoveException("Move can't be beside (w/a/s/d)");
+        }
+    }
 
     public void initializePacmanRandomlyOnMap(){
         pacman = new Pacman(map);
@@ -38,13 +46,12 @@ public class Game {
         while(gameRunning){
             map.printMap();
             System.out.println("\nScore: " + pacman.score);
-            System.out.print("\nEnter Move (w/s/a/d): ");
-            char move = scanner.next().charAt(0);
-            switch (move) {
-                case 'w':
-                case 's':
-                case 'a':
-                case 'd':
+            System.out.print("\nEnter Move (w/s/a/d/q to quit): ");
+            try {
+                char move = scanner.next().charAt(0);
+                move = Character.toLowerCase(move);
+                if (move != 'q'){
+                    validateMove(move);
                     for (Ghost ghost : ghosts) {
                         ghost.moveRandomly(map);
                     }
@@ -59,10 +66,13 @@ public class Game {
                         gameRunning = false;
                         break;
                     }
+                } else {
+                    gameRunning = false;
                     break;
-                default:
-                    System.out.println("Invalid Move!");
-                    break;
+                }
+            } catch (NotMoveException nme) {
+                System.out.println("\nException caught: " + nme.getMessage());
+                scanner.nextLine();
             }
         }
     }
@@ -75,25 +85,24 @@ public class Game {
             map.printMap();
             System.out.println("\nScore: " + pacman.score);
             System.out.print("\nEnter Move (w/s/a/d/q to quit): ");
-            char move = scanner.next().charAt(0);
-            switch (move) {
-                case 'w':
-                case 's':
-                case 'a':
-                case 'd':
+            try {
+                char move = scanner.next().charAt(0);
+                move = Character.toLowerCase(move);
+                if(move != 'q'){
+                    validateMove(move);
                     pacman.move(move, map);
                     if(map.areAllFoodEaten()){
                         System.out.println("\nCongratulation! You've won!");
                         gameRunning = false;
                         break;
                     }
+                } else {
+                    gameRunning = false; 
                     break;
-                case 'q':
-                    gameRunning = false;
-                    break;
-                default:
-                    System.out.println("Invalid Move!");
-                    break;
+                }
+            } catch (NotMoveException nme) {
+                System.out.println("\nException caught: " + nme.getMessage());
+                scanner.nextLine();
             }
         }
     }

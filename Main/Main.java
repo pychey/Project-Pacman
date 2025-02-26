@@ -3,13 +3,21 @@ package main;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import exception.NotNumberException;
 import exception.WrongMenuOptionException;
 
 public class Main {
-    public static void main(String[] args) {
+
+    public static void validateOption(int option) {
+        if(option != 1 && option != 2 && option != 3){
+            throw new WrongMenuOptionException("Option can't be beside 1,2,3");
+        }
+    }
+
+    public static void main(String[] args){
         Scanner scanner = new Scanner(System.in);
         boolean gameQuit = false;
-        int opt;
+        int opt = -1;
         do {
             System.out.println("\nNumber Of Game Played: " + Game.NumberOfGamePlayed);
             System.out.println("1.Play");
@@ -17,7 +25,11 @@ public class Main {
             System.out.println("3.Quit");
             System.out.print("Enter : ");
             try {
-                opt = scanner.nextInt();
+                try {
+                    opt = scanner.nextInt();
+                } catch (InputMismatchException e) {
+                    throw new NotNumberException("Option can't be String");
+                }
                 validateOption(opt);
                 switch(opt){
                     case 1:
@@ -33,23 +45,13 @@ public class Main {
                         break;
                 }
             } 
-            catch ( WrongMenuOptionException e) {
-                System.out.println("\nInput has be number 1,2 or 3");
-            } 
-            catch (InputMismatchException e) {
-                System.out.println("\nInput has to be number 1,2 or 3");
+            catch ( WrongMenuOptionException | NotNumberException e) {
+                System.out.println("\nException caught: " + e.getMessage());
                 scanner.nextLine();
-            }
+            } 
         } while (!gameQuit);
         scanner.close();
     }
-
-    public static void validateOption(int option) {
-        if(option < 1 || option > 3){
-            throw new WrongMenuOptionException();
-        }
-    }
-
 }
 
 //if entered wrong, ask to enter move again imidietly
