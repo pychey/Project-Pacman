@@ -14,8 +14,8 @@ public class Pacman extends Character{
 
     public Pacman(Map map){
         do {
-            x = (int)(Math.random() * (map.height -1));
-            y = (int)(Math.random() * (map.width -1));
+            x = (int)(Math.random() * map.height);
+            y = (int)(Math.random() * map.width);
         } while(map.isWall(x,y) || map.isGhost(x,y));
         map.placePacman(x,y);
         this.name = "Pacman";

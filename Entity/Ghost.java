@@ -14,8 +14,8 @@ public class Ghost extends Character{
 
     public Ghost(String name, char symbol, Map map){
         do {
-            x = (int)(Math.random() * (map.height -1));
-            y = (int)(Math.random() * (map.width -1));
+            x = (int)(Math.random() * map.height);
+            y = (int)(Math.random() * map.width);
         } while(map.isWall(x,y) || map.isPacman(x,y) || map.isGhost(x,y));
         map.placeGhost(x,y);
         this.name = name;
