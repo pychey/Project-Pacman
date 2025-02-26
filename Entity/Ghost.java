@@ -4,11 +4,12 @@ import map.Map;
 public class Ghost extends Character{
     char lastGridOfGhost = '.';
 
-    public Ghost(int x, int y, String name, char symbol){
+    public Ghost(int x, int y, String name, char symbol, Map map){
         this.x = x;
         this.y = y;
         this.name = name;
         this.symbol = symbol;
+        map.placeGhost(x,y);
     }
 
     public Ghost(String name, char symbol, Map map){

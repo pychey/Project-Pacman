@@ -4,11 +4,12 @@ import map.Map;
 public class Pacman extends Character{
     public int score = 0;
 
-    public Pacman(int x, int y){
+    public Pacman(int x, int y, Map map){
         this.x = x;
         this.y = y;
         this.name = "Pacman";
         this.symbol = 'P';
+        map.placePacman(x,y);
     }
 
     public Pacman(Map map){

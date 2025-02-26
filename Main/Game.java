@@ -26,22 +26,24 @@ public class Game {
         }
     }
 
-    public void initializePacmanRandomlyOnMap(){
+    public void initializePacmanOnMap(){
         pacman = new Pacman(map);
     }
 
-    public void initializeGhostRandomlyOnMap(){
+    public void initializeGhostOnMap(){
         ghosts = new Ghost[] {
-            new Ghost("BlueGhost",'B',map),
-            new Ghost("RedGhost",'R',map)
+            new Ghost("BlueGhost",'b',map),
+            new Ghost("RedGhost",'r',map),
+            new Ghost("OrangeGhost",'o',map),
+            new Ghost("PinkGhost",'p',map)
         };
     }
 
     public void runGame(){
         NumberOfGamePlayed += 1;
-        initializePacmanRandomlyOnMap();
+        initializePacmanOnMap();
         map.generateFood();
-        initializeGhostRandomlyOnMap();
+        initializeGhostOnMap();
         System.out.println("\nWelcome to Pacman Game: ");
         while(gameRunning){
             map.printMap();
@@ -78,7 +80,7 @@ public class Game {
     }
 
     public void practice(){
-        initializePacmanRandomlyOnMap();
+        initializePacmanOnMap();
         map.generateFood();
         System.out.println("\nWelcome to Pacman Game Practice: ");
         while(gameRunning){
