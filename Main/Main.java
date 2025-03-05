@@ -1,5 +1,5 @@
 package main;
-
+import userdata.*;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -14,7 +14,7 @@ public class Main {
         }
     }
 
-    public static void main(String[] args){
+    public static void startGame(){
         Scanner scanner = new Scanner(System.in);
         boolean gameQuit = false;
         int opt = -1;
@@ -52,8 +52,12 @@ public class Main {
         } while (!gameQuit);
         scanner.close();
     }
+    public static void main(String[] args) {
+        // Call the Test class method to handle user login
+        UserManager.handleUserLogin();
+    
+    }
 }
-
 //if entered wrong, ask to enter move again imidietly
 //when moving toward wall, pacman should stay in the same place
 //ghost should move after pacman move, but ghost should not move into wall
