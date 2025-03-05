@@ -21,10 +21,14 @@ public class UserManager {
                 System.out.print("Enter password: ");
                 String password = scanner.nextLine();
 
-                User newUser = new User(username, password);
-                newUser.saveUser();
-                System.out.println("Registration successful!");
-
+                if(User.authenticateUsername(username)){
+                    System.out.println("User already exist, try another username");
+                } else {
+                    User newUser = new User(username, password);
+                    newUser.saveUser();
+                    System.out.println("Registration successful!");
+                    System.out.println("To play, you have to log in, have fun!");
+                }
             } else if (option == 2) {
                 System.out.print("Enter username: ");
                 String username = scanner.nextLine();

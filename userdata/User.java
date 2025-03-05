@@ -24,7 +24,7 @@ public class User {
 
     // Save user to a file
     public void saveUser() throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter("users.txt", true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter("./userdata/users.txt", true));
         writer.write(username + "," + password);
         writer.newLine();
         writer.close();
@@ -32,11 +32,25 @@ public class User {
 
     // Authenticate user
     public static boolean authenticate(String username, String password) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader("users.txt"));
+        BufferedReader reader = new BufferedReader(new FileReader("./userdata/users.txt"));
         String line;
         while ((line = reader.readLine()) != null) {
             String[] userInfo = line.split(",");
             if (userInfo[0].equals(username) && userInfo[1].equals(password)) {
+                reader.close();
+                return true;
+            }
+        }
+        reader.close();
+        return false;
+    }
+
+    public static boolean authenticateUsername(String username) throws IOException {
+        BufferedReader reader = new BufferedReader(new FileReader("./userdata/users.txt"));
+        String line;
+        while ((line = reader.readLine()) != null) {
+            String[] userInfo = line.split(",");
+            if (userInfo[0].equals(username)) {
                 reader.close();
                 return true;
             }

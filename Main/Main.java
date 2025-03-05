@@ -14,6 +14,10 @@ public class Main {
         }
     }
 
+    public static void main(String[] args) {
+        UserManager.handleUserLogin();
+    }
+
     public static void startGame(){
         Scanner scanner = new Scanner(System.in);
         boolean gameQuit = false;
@@ -51,11 +55,6 @@ public class Main {
             } 
         } while (!gameQuit);
         scanner.close();
-    }
-    public static void main(String[] args) {
-        // Call the Test class method to handle user login
-        UserManager.handleUserLogin();
-    
     }
 }
 //if entered wrong, ask to enter move again imidietly

@@ -77,9 +77,10 @@ public class Game {
                 scanner.nextLine();
             }
         }
+        //save user
     }
 
-    public void practice(){
+    public void practice(){                     
         initializePacmanOnMap();
         map.generateFood();
         System.out.println("\nWelcome to Pacman Game Practice: ");
