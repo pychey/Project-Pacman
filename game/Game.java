@@ -1,4 +1,4 @@
-package main;
+package game;
 
 import entity.Ghost;
 import entity.Pacman;
@@ -7,9 +7,9 @@ import exception.WrongMenuOptionException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import map.Map;
+import user.User;
 
 public class Game {
-    public static int NumberOfGamePlayed = 0;
     public boolean gameRunning = false;
     Scanner scanner;
     Map map = new Map();
@@ -34,8 +34,8 @@ public class Game {
         };
     }
 
-    public void runGame(){
-        NumberOfGamePlayed += 1;
+    public void runGame(User userPlaying){
+        userPlaying.totalGamesPlayed++;
         initializePacmanOnMap();
         map.generateFood();
         initializeGhostOnMap();
@@ -54,11 +54,13 @@ public class Game {
                 if(pacman.collidesWithGhost(ghosts)){
                     System.out.println("\nGame Over!");
                     gameRunning = false;
+                    userPlaying.totalLosses++;
                     break;
                 }
                 if(map.areAllFoodEaten()){
                     System.out.println("\nCongratulation! You've won!");
                     gameRunning = false;
+                    userPlaying.totalWins++;
                     break;
                 }
             } else {
@@ -66,6 +68,8 @@ public class Game {
                 break;
             }
         }
+        if(userPlaying.highScore < pacman.score) userPlaying.highScore = pacman.score;
+        userPlaying.updateData();
     }
 
     public void practice(){                     
@@ -92,12 +96,12 @@ public class Game {
         }
     }
 
-    public static void start() {
+    public static void start(User userPlaying) {
         Scanner scanner = new Scanner(System.in);
         boolean gameQuit = false;
         int opt = -1;
         do {
-            System.out.println("\nNumber Of Game Played: " + Game.NumberOfGamePlayed);
+            System.out.println("\nNumber Of Game Played: " + userPlaying.totalGamesPlayed);
             System.out.println("1.Play");
             System.out.println("2.Practice");
             System.out.println("3.Quit");
@@ -108,7 +112,7 @@ public class Game {
                 switch(opt){
                     case 1:
                         Game game = new Game(scanner);
-                        game.runGame();
+                        game.runGame(userPlaying);
                         break;
                     case 2:
                         Game gamePractice = new Game(scanner);
@@ -128,6 +132,5 @@ public class Game {
                 scanner.nextLine();
             }
         } while (!gameQuit);
-        scanner.close();
     }
 }

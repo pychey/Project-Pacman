@@ -3,6 +3,7 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import exception.WrongMenuOptionException;
+import game.Game;
 import user.User;
 
 public class Main {
@@ -39,7 +40,8 @@ public class Main {
                         System.out.print("Enter password: ");
                         String password = scanner.nextLine();
                         if(User.isAccountValid(username, password)){
-                            Game.start();
+                            User userPlaying = User.loadUser(username, password);
+                            Game.start(userPlaying);
                         } else System.out.println("User doesn't exist!");
                         break;
                     case 3:

@@ -4,6 +4,8 @@ import java.io.BufferedWriter;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class User {
     public static String filename = "./user/userdata.txt";
@@ -23,6 +25,15 @@ public class User {
         this.totalLosses = 0;
     }
 
+    public User(String username, String password, int highScore, int totalGamesPlayed, int totalWins, int totalLosses){
+        this.username = username;
+        this.password = password; 
+        this.highScore = highScore;
+        this.totalGamesPlayed = highScore;
+        this.totalWins = totalWins;
+        this.totalLosses = totalLosses;
+    }
+
     public String getUsername() {
         return username;
     }
@@ -31,10 +42,8 @@ public class User {
         return password;
     }
 
-    public void setHighScore(int highScore) {
-        if (highScore > this.highScore) {
-            this.highScore = highScore;
-        }
+    public String toString() {
+        return username + "," + password + "," + highScore + "," + totalGamesPlayed + "," + totalWins + "," + totalLosses;
     }
 
     public void saveToFile() {
@@ -75,5 +84,49 @@ public class User {
         }
         reader.close();
         return false;
+    }
+
+    public static User loadUser(String username, String password) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                if (data[0].equals(username) && data[1].equals(password)) {
+                    User user = new User(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Integer.parseInt(data[5]));
+                    return user;
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error: reading user data failed!");
+        }
+        return null;
+    }
+
+    public void updateData()  {
+        List<User> users = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                User user = new User(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Integer.parseInt(data[5]));
+                if (user.getUsername().equals(username)) {
+                    users.add(this); 
+                } else {
+                    users.add(user);
+                }
+            }
+        } catch (IOException e) {
+            System.out.println("Error: reading user data failed!");
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
+            for (User user : users) {
+                writer.write(user.toString());
+                writer.newLine();
+            }
+        } catch (IOException e) {
+            System.out.println("Error: writing user data failed!");
+        }
     }
 }
