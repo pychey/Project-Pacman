@@ -5,9 +5,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class User {
+public class User implements Comparable<User> {
     public static String filename = "./user/userdata.txt";
     private String username;      
     private String password;   
@@ -128,5 +129,28 @@ public class User {
         } catch (IOException e) {
             System.out.println("Error: writing user data failed!");
         }
+    }
+
+    public static void displayLeaderboard(){
+        List<User> users = new ArrayList<>();
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                User user = new User(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Integer.parseInt(data[5]));
+                users.add(user);
+            }
+        } catch (IOException e) {
+            System.out.println("Error: reading user data failed!");
+        }
+        Collections.sort(users);
+        System.out.println("Leaderboard:");
+        for (User user :users){ System.out.println(user);}
+    }
+
+    @Override
+    public int compareTo(User other) {
+        return Integer.compare(other.highScore, this.highScore);
     }
 }

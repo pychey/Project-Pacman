@@ -2,7 +2,7 @@ package main;
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-import exception.WrongMenuOptionException;
+import exception.WrongMainMenuOptionException;
 import game.Game;
 import user.User;
 
@@ -21,7 +21,7 @@ public class Main {
             try {
                 int opt = scanner.nextInt();
                 scanner.nextLine(); 
-                new WrongMenuOptionException(opt);
+                new WrongMainMenuOptionException(opt);
 
                 switch (opt) {
                     case 1:
@@ -49,7 +49,7 @@ public class Main {
                         System.out.println("/// Cya! ///");
                         break;
                     }
-            } catch ( WrongMenuOptionException e) {
+            } catch ( WrongMainMenuOptionException e) {
                 System.out.println(e.getMessage());
             } 
             catch ( InputMismatchException e) {

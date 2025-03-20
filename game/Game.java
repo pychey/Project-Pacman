@@ -2,7 +2,7 @@ package game;
 
 import entity.Ghost;
 import entity.Pacman;
-import exception.WrongMenuOptionException;
+import exception.WrongGameMenuOptionException;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -106,11 +106,12 @@ public class Game {
             System.out.println("\nNumber Of Game Played: " + userPlaying.totalGamesPlayed);
             System.out.println("1.Play");
             System.out.println("2.Practice");
-            System.out.println("3.Quit");
+            System.out.println("3.Leaderboard");
+            System.out.println("4.Quit");
             System.out.print("Enter : ");
             try {
                 opt = scanner.nextInt();
-                new WrongMenuOptionException(opt);
+                new WrongGameMenuOptionException(opt);
                 switch(opt){
                     case 1:
                         Game game = new Game(scanner);
@@ -121,11 +122,14 @@ public class Game {
                         gamePractice.practice();
                         break;
                     case 3:
-                        gameQuit = true;
+                        User.displayLeaderboard();
                         break;
+                    case 4:
+                        gameQuit = true;
+                        break;     
                 }
             } 
-            catch ( WrongMenuOptionException e) {
+            catch ( WrongGameMenuOptionException e) {
                 System.out.println(e.getMessage());
                 scanner.nextLine();
             } 
