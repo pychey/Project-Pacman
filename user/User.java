@@ -10,26 +10,26 @@ import java.util.List;
 public class User {
     public static String filename = "./user/userdata.txt";
     private String username;      
-    private String password;     
-    public int highScore;       
-    public int totalGamesPlayed;  
+    private String password;   
+    public int totalGamesPlayed;   
+    public int highScore;        
     public int totalWins;         
     public int totalLosses;  
 
     public User(String username, String password) {
         this.username = username;
         this.password = password; 
-        this.highScore = 0;
         this.totalGamesPlayed = 0;
+        this.highScore = 0;
         this.totalWins = 0;
         this.totalLosses = 0;
     }
 
-    public User(String username, String password, int highScore, int totalGamesPlayed, int totalWins, int totalLosses){
+    public User(String username, String password, int totalGamesPlayed, int highScore, int totalWins, int totalLosses){
         this.username = username;
         this.password = password; 
         this.highScore = highScore;
-        this.totalGamesPlayed = highScore;
+        this.totalGamesPlayed = totalGamesPlayed;
         this.totalWins = totalWins;
         this.totalLosses = totalLosses;
     }
@@ -43,7 +43,7 @@ public class User {
     }
 
     public String toString() {
-        return username + "," + password + "," + highScore + "," + totalGamesPlayed + "," + totalWins + "," + totalLosses;
+        return username + "," + password + "," + totalGamesPlayed + "," + highScore + "," + totalWins + "," + totalLosses;
     }
 
     public void saveToFile() {

@@ -68,7 +68,9 @@ public class Game {
                 break;
             }
         }
-        if(userPlaying.highScore < pacman.score) userPlaying.highScore = pacman.score;
+        if(userPlaying.highScore < pacman.score) {
+            userPlaying.highScore = pacman.score;
+        }
         userPlaying.updateData();
     }
 

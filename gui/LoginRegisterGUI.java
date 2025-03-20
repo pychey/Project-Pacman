@@ -55,24 +55,6 @@ public class LoginRegisterGUI {
         frame.setVisible(true);
     }
 
-    private void handleLogin() {
-        String username = usernameField.getText();
-        String password = new String(passwordField.getPassword());
-    
-        try {
-            if (User.isAccountValid(username, password)) {
-                statusLabel.setText("Login successful! Starting game...");
-                User userPlaying = User.loadUser(username, password);
-                frame.dispose();
-                startGame(userPlaying);
-            } else {
-                statusLabel.setText("Invalid username or password.");
-            }
-        } catch (IOException e) {
-            statusLabel.setText("Error: File handling failed!");
-        }
-    }
-
     private void handleRegister() {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
@@ -90,6 +72,24 @@ public class LoginRegisterGUI {
         }
     }
 
+    private void handleLogin() {
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+    
+        try {
+            if (User.isAccountValid(username, password)) {
+                statusLabel.setText("Login successful! Starting game");
+                User userPlaying = User.loadUser(username, password);
+                frame.dispose();
+                startGame(userPlaying);
+            } else {
+                statusLabel.setText("Invalid username or password.");
+            }
+        } catch (IOException e) {
+            statusLabel.setText("Error: File handling failed!");
+        }
+    }
+
     private void startGame(User userPlaying) {
         new Thread(() -> {
             Game.start(userPlaying);  
@@ -97,9 +97,7 @@ public class LoginRegisterGUI {
         }).start();
     }
     
-    // Restart the login/register GUI
     private void restartGUI() {
         javax.swing.SwingUtilities.invokeLater(LoginRegisterGUI::new);
     }
-    
 }
