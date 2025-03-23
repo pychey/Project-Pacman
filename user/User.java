@@ -1,156 +1,180 @@
 package user;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
-public class User implements Comparable<User> {
-    public static String filename = "./user/userdata.txt";
-    private String username;      
-    private String password;   
-    public int totalGamesPlayed;   
-    public int highScore;        
-    public int totalWins;         
-    public int totalLosses;  
+import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+public class User {
+    private static String url = "jdbc:mysql://localhost:3306/pacman";
+    private static String user = "root";
+    private static String pass = "@123Pychey";
+    
+    private String username;
+    private String password;
+    public int totalGamesPlayed;
+    public int highScore;
+    public int totalWins;
+    public int totalLosses;
 
     public User(String username, String password) {
         this.username = username;
-        this.password = password; 
+        this.password = password;
         this.totalGamesPlayed = 0;
         this.highScore = 0;
         this.totalWins = 0;
         this.totalLosses = 0;
     }
 
-    public User(String username, String password, int totalGamesPlayed, int highScore, int totalWins, int totalLosses){
+    public User(String username, String password, int totalGamesPlayed, int highScore, int totalWins, int totalLosses) {
         this.username = username;
-        this.password = password; 
-        this.highScore = highScore;
+        this.password = password;
         this.totalGamesPlayed = totalGamesPlayed;
+        this.highScore = highScore;
         this.totalWins = totalWins;
         this.totalLosses = totalLosses;
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
+    @Override
     public String toString() {
-        return username + "," + password + "," + totalGamesPlayed + "," + highScore + "," + totalWins + "," + totalLosses;
+        return username + ", High Score: " + highScore + ", Wins: " + totalWins + ", Losses: " + totalLosses;
     }
 
-    public void saveToFile() {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
-            writer.write(username + "," + password + "," +
-                         highScore+ "," + totalGamesPlayed + "," +
-                         totalWins + "," + totalLosses);
-            writer.newLine();
-            System.out.println("Saving user data completed!");
-        } catch (IOException e) {
-            System.out.println("Error: saving user data failed!");
+    public void saveToDatabase() {
+        String query = """
+                        INSERT INTO users
+                        (username, password, totalGamesPlayed, highScore, totalWins, totalLosses) 
+                        VALUES (?, ?, ?, ?, ?, ?)
+                        """ ;
+        try {
+            Connection connection = DriverManager.getConnection(url, user, pass);
+            PreparedStatement preSt = connection.prepareStatement(query);
+            preSt.setString(1, username);
+            preSt.setString(2, password);
+            preSt.setInt(3, totalGamesPlayed);
+            preSt.setInt(4, highScore);
+            preSt.setInt(5, totalWins);
+            preSt.setInt(6, totalLosses);
+            preSt.executeUpdate();
+            System.out.println("User Saved Successfully!");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static boolean isAccountValid(String username, String password) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] userInfo = line.split(",");
-            if (userInfo[0].equals(username) && userInfo[1].equals(password)) {
-                reader.close();
-                return true;
+    public static boolean isAccountValid(String username, String password) {
+        String query = """
+                        SELECT 1 FROM users 
+                        WHERE username = ? AND password = ?
+                        """ ; 
+        try {
+            Connection connection = DriverManager.getConnection(url, user, pass);
+            PreparedStatement preSt = connection.prepareStatement(query);
+            preSt.setString(1, username);
+            preSt.setString(2, password);
+            try (ResultSet resultSet = preSt.executeQuery()) {
+                return resultSet.next();
             }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        reader.close();
         return false;
     }
 
-    public static boolean isNameExist(String username) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(filename));
-        String line;
-        while ((line = reader.readLine()) != null) {
-            String[] userInfo = line.split(",");
-            if (userInfo[0].equals(username)) {
-                reader.close();
-                return true;
+    public static boolean isNameExist(String username) {
+        String query = """
+                        SELECT 1 FROM users 
+                        WHERE username = ?
+                        """;
+        try {
+            Connection connection = DriverManager.getConnection(url, user, pass);
+            PreparedStatement preSt = connection.prepareStatement(query);
+            preSt.setString(1, username);
+            try (ResultSet resultSet = preSt.executeQuery()) {
+                return resultSet.next();
             }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        reader.close();
         return false;
     }
 
     public static User loadUser(String username, String password) {
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                if (data[0].equals(username) && data[1].equals(password)) {
-                    User user = new User(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Integer.parseInt(data[5]));
-                    return user;
+        String query = """
+                        SELECT * FROM users
+                        WHERE username = ? AND password = ?
+                        """ ;
+        try {
+            Connection connection = DriverManager.getConnection(url, user, pass);
+            PreparedStatement preSt = connection.prepareStatement(query);
+            preSt.setString(1, username);
+            preSt.setString(2, password);
+            try (ResultSet resultSet = preSt.executeQuery()) {
+                if (resultSet.next()) {
+                    return new User(
+                        resultSet.getString("username"),
+                        resultSet.getString("password"),
+                        resultSet.getInt("totalGamesPlayed"),
+                        resultSet.getInt("highScore"),
+                        resultSet.getInt("totalWins"),
+                        resultSet.getInt("totalLosses")
+                    );
                 }
             }
-        } catch (IOException e) {
-            System.out.println("Error: reading user data failed!");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
         return null;
     }
 
-    public void updateData()  {
-        List<User> users = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                User user = new User(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Integer.parseInt(data[5]));
-                if (user.getUsername().equals(username)) {
-                    users.add(this); 
-                } else {
-                    users.add(user);
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Error: reading user data failed!");
-        }
-
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename))) {
-            for (User user : users) {
-                writer.write(user.toString());
-                writer.newLine();
-            }
-        } catch (IOException e) {
-            System.out.println("Error: writing user data failed!");
+    public void updateData() {
+        String query = """
+                        UPDATE users 
+                        SET totalGamesPlayed = ?, highScore = ?, totalWins = ?, totalLosses = ? 
+                        WHERE username = ?
+                        """ ;
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement preSt = connection.prepareStatement(query)) {
+            preSt.setInt(1, totalGamesPlayed);
+            preSt.setInt(2, highScore);
+            preSt.setInt(3, totalWins);
+            preSt.setInt(4, totalLosses);
+            preSt.setString(5, username);
+            preSt.executeUpdate();
+            System.out.println("Userdata Updated Successfully!");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
     }
 
-    public static void displayLeaderboard(){
-        List<User> users = new ArrayList<>();
-
-        try (BufferedReader reader = new BufferedReader(new FileReader(filename))) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                String[] data = line.split(",");
-                User user = new User(data[0], data[1], Integer.parseInt(data[2]), Integer.parseInt(data[3]), Integer.parseInt(data[4]), Integer.parseInt(data[5]));
-                users.add(user);
+    public static void displayLeaderboard() {
+        ArrayList<User> users = new ArrayList<>();
+        String query = """
+                        SELECT * FROM users 
+                        ORDER BY highScore DESC
+                        """;
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement preSt = connection.prepareStatement(query);
+             ResultSet resultSet = preSt.executeQuery()) {
+            while (resultSet.next()) {
+                users.add(new User(
+                    resultSet.getString("username"),
+                    resultSet.getString("password"),
+                    resultSet.getInt("totalGamesPlayed"),
+                    resultSet.getInt("highScore"),
+                    resultSet.getInt("totalWins"),
+                    resultSet.getInt("totalLosses")
+                ));
             }
-        } catch (IOException e) {
-            System.out.println("Error: reading user data failed!");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        Collections.sort(users);
+        
         System.out.println("Leaderboard:");
-        for (User user :users){ System.out.println(user);}
-    }
-
-    @Override
-    public int compareTo(User other) {
-        return Integer.compare(other.highScore, this.highScore);
+        for (User user : users) {
+            System.out.println(user);
+        }
     }
 }

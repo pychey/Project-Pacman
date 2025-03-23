@@ -6,7 +6,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 public class LoginRegisterGUI {
     private JFrame frame;
@@ -59,16 +58,12 @@ public class LoginRegisterGUI {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        try {
-            if (!User.isNameExist(username)) {
-                User newUser = new User(username, password);
-                newUser.saveToFile();
-                statusLabel.setText("Registration successful! You can now log in.");
-            } else {
-                statusLabel.setText("Username already exists!");
-            }
-        } catch (IOException e) {
-            statusLabel.setText("Error: File handling failed!");
+        if (!User.isNameExist(username)) {
+            User newUser = new User(username, password);
+            newUser.saveToDatabase();
+            statusLabel.setText("Registration successful! You can now log in.");
+        } else {
+            statusLabel.setText("Username already exists!");
         }
     }
 
@@ -76,17 +71,13 @@ public class LoginRegisterGUI {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
     
-        try {
-            if (User.isAccountValid(username, password)) {
-                statusLabel.setText("Login successful! Starting game");
-                User userPlaying = User.loadUser(username, password);
-                frame.dispose();
-                startGame(userPlaying);
-            } else {
-                statusLabel.setText("Invalid username or password.");
-            }
-        } catch (IOException e) {
-            statusLabel.setText("Error: File handling failed!");
+        if (User.isAccountValid(username, password)) {
+            statusLabel.setText("Login successful! Starting game");
+            User userPlaying = User.loadUser(username, password);
+            frame.dispose();
+            startGame(userPlaying);
+        } else {
+            statusLabel.setText("Invalid username or password.");
         }
     }
 
