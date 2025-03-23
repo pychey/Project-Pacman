@@ -48,9 +48,8 @@ public class User {
                         (username, password, totalGamesPlayed, highScore, totalWins, totalLosses) 
                         VALUES (?, ?, ?, ?, ?, ?)
                         """ ;
-        try {
-            Connection connection = DriverManager.getConnection(url, user, pass);
-            PreparedStatement preSt = connection.prepareStatement(query);
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement preSt = connection.prepareStatement(query)) {
             preSt.setString(1, username);
             preSt.setString(2, password);
             preSt.setInt(3, totalGamesPlayed);
@@ -69,9 +68,8 @@ public class User {
                         SELECT 1 FROM users 
                         WHERE username = ? AND password = ?
                         """ ; 
-        try {
-            Connection connection = DriverManager.getConnection(url, user, pass);
-            PreparedStatement preSt = connection.prepareStatement(query);
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement preSt = connection.prepareStatement(query)) {
             preSt.setString(1, username);
             preSt.setString(2, password);
             try (ResultSet resultSet = preSt.executeQuery()) {
@@ -88,9 +86,8 @@ public class User {
                         SELECT 1 FROM users 
                         WHERE username = ?
                         """;
-        try {
-            Connection connection = DriverManager.getConnection(url, user, pass);
-            PreparedStatement preSt = connection.prepareStatement(query);
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement preSt = connection.prepareStatement(query)) {
             preSt.setString(1, username);
             try (ResultSet resultSet = preSt.executeQuery()) {
                 return resultSet.next();
@@ -106,9 +103,8 @@ public class User {
                         SELECT * FROM users
                         WHERE username = ? AND password = ?
                         """ ;
-        try {
-            Connection connection = DriverManager.getConnection(url, user, pass);
-            PreparedStatement preSt = connection.prepareStatement(query);
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement preSt = connection.prepareStatement(query)) {
             preSt.setString(1, username);
             preSt.setString(2, password);
             try (ResultSet resultSet = preSt.executeQuery()) {

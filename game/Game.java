@@ -107,7 +107,8 @@ public class Game {
             System.out.println("1.Play");
             System.out.println("2.Practice");
             System.out.println("3.Leaderboard");
-            System.out.println("4.Quit");
+            System.out.println("4.Logout");
+            System.out.println("0.Quit");
             System.out.print("Enter : ");
             try {
                 opt = scanner.nextInt();
@@ -125,8 +126,10 @@ public class Game {
                         User.displayLeaderboard();
                         break;
                     case 4:
-                        gameQuit = true;
-                        break;     
+                        gameQuit = true;   
+                        break;
+                    case 0:
+                        
                 }
             } 
             catch ( WrongGameMenuOptionException e) {
