@@ -7,7 +7,7 @@ public class WrongMainMenuOptionException extends InputMismatchException {
         super(message);
     }
     public WrongMainMenuOptionException(int option){
-        if(option != 1 && option != 2 && option != 3){
+        if(option != 1 && option != 2 && option != 3 && option != 0){
             throw new WrongMainMenuOptionException("Exception Caught: Option can't be beside 1,2,3");
         }
     }

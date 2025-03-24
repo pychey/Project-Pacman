@@ -3,9 +3,12 @@ package game;
 import entity.Ghost;
 import entity.Pacman;
 import exception.WrongGameMenuOptionException;
+import main.Main;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
+import database.MySQLConnection;
 import map.Map;
 import user.User;
 
@@ -71,7 +74,7 @@ public class Game {
         if(userPlaying.highScore < pacman.score) {
             userPlaying.highScore = pacman.score;
         }
-        userPlaying.updateData();
+        MySQLConnection.updateUserData(userPlaying);
     }
 
     public void practice(){                     
@@ -123,13 +126,14 @@ public class Game {
                         gamePractice.practice();
                         break;
                     case 3:
-                        User.displayLeaderboard();
+                        MySQLConnection.displayLeaderboard();
                         break;
                     case 4:
                         gameQuit = true;   
                         break;
                     case 0:
-                        
+                        Main.quitGame = true;
+                        return;
                 }
             } 
             catch ( WrongGameMenuOptionException e) {
