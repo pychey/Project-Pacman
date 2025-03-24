@@ -1,4 +1,6 @@
 package entity;
+import java.util.ArrayList;
+
 import map.Map;
 
 public class Pacman extends Character{
@@ -60,7 +62,7 @@ public class Pacman extends Character{
             map.placePacman(x, y);
         }
     
-    public boolean collidesWithGhost(Ghost[] ghosts){
+    public boolean collidesWithGhost(ArrayList<Ghost> ghosts){
         for (Ghost ghost : ghosts) {
             if(this.x == ghost.x && this.y == ghost.y){
                 return true;

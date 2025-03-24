@@ -5,6 +5,7 @@ import entity.Pacman;
 import exception.WrongGameMenuOptionException;
 import main.Main;
 
+import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -14,70 +15,91 @@ import user.User;
 
 public class Game {
     public boolean gameRunning = false;
+    public boolean gameRunningEachLevel = false;
     Scanner scanner;
-    Map map = new Map();
+    Map map;
     Pacman pacman;
-    Ghost[] ghosts;
+    ArrayList<Ghost> ghostList;
+    int currentLevel = 1;
+    int maxLevel = 5;
+    int ghostMultiplier = 3;
 
     public Game(Scanner mainScanner) {
         this.scanner = mainScanner;
         gameRunning = true;
     };
 
+    public void initializeNewMap(){
+        map = new Map();
+    }
+
     public void initializePacmanOnMap(){
         pacman = new Pacman(map);
     }
 
-    public void initializeGhostOnMap(){
-        ghosts = new Ghost[] {
-            new Ghost("BlueGhost",'b',map),
-            new Ghost("RedGhost",'r',map),
-            new Ghost("OrangeGhost",'o',map),
-            new Ghost("PinkGhost",'p',map)
-        };
+    public void initializeGhostsOnMap(int level){
+        ghostList = new ArrayList<Ghost>();
+        int numberOfGhosts = level * ghostMultiplier;
+        for (int i = 0; i < numberOfGhosts; i++) ghostList.add(new Ghost("Ghost",'G', map));
     }
 
     public void runGame(User userPlaying){
         userPlaying.totalGamesPlayed++;
-        initializePacmanOnMap();
-        map.generateFood();
-        initializeGhostOnMap();
-        System.out.println("\nWelcome to Pacman Game: ");
-        while(gameRunning){
-        map.printMap();
-        System.out.println("\nScore: " + pacman.score);
-        System.out.print("\nEnter Move (w/s/a/d/q to quit): ");
-            char move = scanner.next().charAt(0);
-            move = Character.toLowerCase(move);
-            if (move != 'q'){
-                for (Ghost ghost : ghosts) {
-                    ghost.moveRandomly(map);
-                }
-                pacman.move(move, map);
-                if(pacman.collidesWithGhost(ghosts)){
-                    System.out.println("\nGame Over!");
+        currentLevel = 1;
+        int totalScore = 0;
+        while (gameRunning) {
+            initializeNewMap();
+            initializePacmanOnMap();
+            map.generateFood();
+            initializeGhostsOnMap(currentLevel);
+            
+            System.out.println("\nWelcome to Pacman Game - Level " + currentLevel);
+            gameRunningEachLevel = true;
+            
+            while(gameRunningEachLevel){
+                map.printMap();
+                System.out.println("\nLevel: " + currentLevel + " | Score: " + pacman.score + " | Total Score: " + totalScore);
+                System.out.print("\nEnter Move (w/s/a/d/q to quit): ");
+                char move = scanner.next().charAt(0);
+                move = Character.toLowerCase(move);
+                
+                if (move != 'q'){
+                    for (Ghost ghost : ghostList) ghost.moveRandomly(map);
+                    pacman.move(move, map);
+                    if(pacman.collidesWithGhost(ghostList)){
+                        System.out.println("\nYou've Lost! You reached level " + currentLevel);
+                        gameRunning = false;
+                        gameRunningEachLevel = false;
+                        userPlaying.totalLosses++;
+                        break;
+                    }
+                    if(map.areAllFoodEaten()){
+                        totalScore += pacman.score;
+                        if (currentLevel < maxLevel) {
+                            System.out.println("\nLevel " + currentLevel + " Completed! Moving to Next Level !");
+                            currentLevel++;
+                            gameRunningEachLevel = false;
+                        } else {
+                            System.out.println("\nCongratulations! You've completed all " + maxLevel + " levels!");
+                            gameRunning = false;
+                            gameRunningEachLevel = false;
+                            userPlaying.totalWins++;
+                        }
+                    }
+                } else {
                     gameRunning = false;
-                    userPlaying.totalLosses++;
-                    break;
+                    gameRunningEachLevel = false;
                 }
-                if(map.areAllFoodEaten()){
-                    System.out.println("\nCongratulation! You've won!");
-                    gameRunning = false;
-                    userPlaying.totalWins++;
-                    break;
-                }
-            } else {
-                gameRunning = false;
-                break;
             }
         }
-        if(userPlaying.highScore < pacman.score) {
-            userPlaying.highScore = pacman.score;
-        }
+        totalScore += pacman.score;
+        if(userPlaying.highScore < totalScore) userPlaying.highScore = totalScore;
+        System.out.println("\nFinal Score: " + totalScore);
         MySQLConnection.updateUserData(userPlaying);
     }
 
-    public void practice(){                     
+    public void practice(){       
+        initializeNewMap();              
         initializePacmanOnMap();
         map.generateFood();
         System.out.println("\nWelcome to Pacman Game Practice: ");
