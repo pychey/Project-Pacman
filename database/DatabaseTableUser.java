@@ -7,11 +7,11 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class MySQLConnection {
-
-    private static String url = "jdbc:mysql://localhost:3306/pacman";
-    private static String user = "root";
-    private static String pass = "@123Pychey";
+public class DatabaseTableUser{
+    
+    protected static String url = "jdbc:mysql://localhost:3306/pacman";
+    protected static String user = "root";
+    protected static String pass = "@123Pychey";
 
     public static void saveUserToDatabase(User userToSave) {
         String query = """
@@ -85,7 +85,8 @@ public class MySQLConnection {
                         resultSet.getInt("totalGamesPlayed"),
                         resultSet.getInt("highScore"),
                         resultSet.getInt("totalWins"),
-                        resultSet.getInt("totalLosses")
+                        resultSet.getInt("totalLosses"),
+                        resultSet.getInt("levelReached")
                     );
                 }
             }
@@ -98,7 +99,7 @@ public class MySQLConnection {
     public static void updateUserData(User userPlaying) {
         String query = """
                         UPDATE users 
-                        SET totalGamesPlayed = ?, highScore = ?, totalWins = ?, totalLosses = ? 
+                        SET totalGamesPlayed = ?, highScore = ?, totalWins = ?, totalLosses = ?, levelReached = ?
                         WHERE username = ?
                         """ ;
         try (Connection connection = DriverManager.getConnection(url, user, pass);
@@ -107,7 +108,8 @@ public class MySQLConnection {
             preSt.setInt(2, userPlaying.highScore);
             preSt.setInt(3, userPlaying.totalWins);
             preSt.setInt(4, userPlaying.totalLosses);
-            preSt.setString(5, userPlaying.getUsername());
+            preSt.setInt(5, userPlaying.levelReached);
+            preSt.setString(6, userPlaying.getUsername());
             preSt.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
@@ -129,7 +131,8 @@ public class MySQLConnection {
                     resultSet.getInt("totalGamesPlayed"),
                     resultSet.getInt("highScore"),
                     resultSet.getInt("totalWins"),
-                    resultSet.getInt("totalLosses")
+                    resultSet.getInt("totalLosses"),
+                    resultSet.getInt("levelReached")
                 );
                 System.out.println(user);
             }
@@ -137,4 +140,19 @@ public class MySQLConnection {
             System.out.println(e.getMessage());
         }
     }
+
+    public static void deleteAccount(String username) {
+        String query = """
+                        DELETE FROM users
+                        WHERE username = ?
+                        """;
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement preSt = connection.prepareStatement(query)) {
+            preSt.setString(1, username);
+            preSt.executeUpdate();
+            System.out.println("Account deleted successfully!");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+     }
 }

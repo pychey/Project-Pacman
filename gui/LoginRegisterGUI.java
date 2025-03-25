@@ -4,7 +4,7 @@ import game.Game;
 import user.User;
 import javax.swing.*;
 
-import database.MySQLConnection;
+import database.DatabaseTableUser;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -61,9 +61,9 @@ public class LoginRegisterGUI {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
 
-        if (!MySQLConnection.isUserExist(username)) {
+        if (!DatabaseTableUser.isUserExist(username)) {
             User newUser = new User(username, password,false);
-            MySQLConnection.saveUserToDatabase(newUser);
+            DatabaseTableUser.saveUserToDatabase(newUser);
             statusLabel.setText("Registration successful! You can now log in.");
         } else {
             statusLabel.setText("Username already exists!");
@@ -74,9 +74,9 @@ public class LoginRegisterGUI {
         String username = usernameField.getText();
         String password = new String(passwordField.getPassword());
     
-        if (MySQLConnection.isAccountValid(username, password)) {
+        if (DatabaseTableUser.isAccountValid(username, password)) {
             statusLabel.setText("Login successful! Starting game");
-            User userPlaying = MySQLConnection.loadUser(username, password);
+            User userPlaying = DatabaseTableUser.loadUser(username, password);
             frame.dispose();
             startGame(userPlaying);
         } else {

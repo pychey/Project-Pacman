@@ -2,7 +2,7 @@ package main;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
-import database.MySQLConnection;
+import database.DatabaseTableUser;
 import exception.WrongMainMenuOptionException;
 import game.Game;
 import user.User;
@@ -33,7 +33,7 @@ public class Main {
                         String newUsername = scanner.nextLine();
                         System.out.print("Enter password: ");
                         String newPassword = scanner.nextLine();
-                        if(MySQLConnection.isUserExist(newUsername)){
+                        if(DatabaseTableUser.isUserExist(newUsername)){
                             System.out.println("Username already exists!");
                         } else if (newUsername.length() < 4 && newPassword.length() < 4){
                             System.out.println("Both Username and Password has to be at least 4 characters !");
@@ -43,7 +43,7 @@ public class Main {
                             System.out.println("Password has to be at least 4 characters !");
                         }  else {
                             User newUser = new User(newUsername, newPassword,false);
-                            MySQLConnection.saveUserToDatabase(newUser);
+                            DatabaseTableUser.saveUserToDatabase(newUser);
                         }
                         break;
                     case 2:
@@ -51,8 +51,8 @@ public class Main {
                         String username = scanner.nextLine();
                         System.out.print("Enter password: ");
                         String password = scanner.nextLine();
-                        if(MySQLConnection.isAccountValid(username, password)){
-                            User userPlaying = MySQLConnection.loadUser(username, password);
+                        if(DatabaseTableUser.isAccountValid(username, password)){
+                            User userPlaying = DatabaseTableUser.loadUser(username, password);
                             Game.start(userPlaying);
                             if(quitGame) running = false;
                         } else System.out.println("User doesn't exist!");
@@ -60,13 +60,13 @@ public class Main {
                     case 3:
                         System.out.print("Enter username: ");
                         String newGuestname = scanner.nextLine();
-                        if(MySQLConnection.isUserExist(newGuestname)){
+                        if(DatabaseTableUser.isUserExist(newGuestname)){
                             System.out.println("Username already exists!");
                         } else if (newGuestname.length() < 4){
                             System.out.println("Username has to be at least 4 characters !");
                         } else {
                             User newUser = new User(newGuestname, null,true);
-                            MySQLConnection.saveUserToDatabase(newUser);
+                            DatabaseTableUser.saveUserToDatabase(newUser);
                             Game.start(newUser);
                             if(quitGame) running = false;
                         }

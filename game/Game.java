@@ -4,12 +4,11 @@ import entity.Ghost;
 import entity.Pacman;
 import exception.WrongGameMenuOptionException;
 import main.Main;
-
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
-import database.MySQLConnection;
+import database.DatabaseTableHistory;
+import database.DatabaseTableUser;
 import map.Map;
 import user.User;
 
@@ -23,6 +22,7 @@ public class Game {
     int currentLevel = 1;
     int maxLevel = 5;
     int ghostMultiplier = 3;
+    String gameResult;
 
     public Game(Scanner mainScanner) {
         this.scanner = mainScanner;
@@ -71,6 +71,7 @@ public class Game {
                         gameRunning = false;
                         gameRunningEachLevel = false;
                         userPlaying.totalLosses++;
+                        gameResult = "Lose";
                         break;
                     }
                     if(map.areAllFoodEaten()){
@@ -84,18 +85,22 @@ public class Game {
                             gameRunning = false;
                             gameRunningEachLevel = false;
                             userPlaying.totalWins++;
+                            gameResult = "Win";
                         }
                     }
                 } else {
                     gameRunning = false;
                     gameRunningEachLevel = false;
+                    gameResult = "Surrender";
                 }
             }
         }
         totalScore += pacman.score;
         if(userPlaying.highScore < totalScore) userPlaying.highScore = totalScore;
+        if(userPlaying.levelReached < currentLevel) userPlaying.levelReached = currentLevel;
         System.out.println("\nFinal Score: " + totalScore);
-        MySQLConnection.updateUserData(userPlaying);
+        DatabaseTableUser.updateUserData(userPlaying);
+        if (!userPlaying.isGuest) DatabaseTableHistory.addGameHistory(userPlaying.getUsername(),totalScore,currentLevel,gameResult);
     }
 
     public void practice(){       
@@ -132,7 +137,9 @@ public class Game {
             System.out.println("1.Play");
             System.out.println("2.Practice");
             System.out.println("3.Leaderboard");
-            System.out.println("4.Logout");
+            System.out.println("4.History");
+            System.out.println("5.Delete Account");
+            System.out.println("6.Logout");
             System.out.println("0.Quit");
             System.out.print("Enter : ");
             try {
@@ -148,12 +155,26 @@ public class Game {
                         gamePractice.practice();
                         break;
                     case 3:
-                        MySQLConnection.displayLeaderboard();
+                        DatabaseTableUser.displayLeaderboard();
                         break;
                     case 4:
-                        gameQuit = true;   
+                        if(userPlaying.isGuest) System.out.println("Please register an account!");
+                        else DatabaseTableHistory.getHistory(userPlaying.getUsername()); 
+                        break;
+                    case 5:
+                        System.out.print("Are you sure to delete account?(Y/N): ");
+                        String deleteOption = scanner.next().toUpperCase();
+                        if (deleteOption.equals("Y")) {
+                            DatabaseTableUser.deleteAccount(userPlaying.getUsername());
+                            gameQuit = true;
+                        }
+                        else System.out.println("Account not deleted!");
+                        break;
+                    case 6:
+                        gameQuit = true;
                         break;
                     case 0:
+                        System.out.println("/// Cya ///");
                         Main.quitGame = true;
                         return;
                 }
