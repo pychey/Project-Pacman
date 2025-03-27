@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import javax.swing.table.DefaultTableModel;
+
 import history.History;
 
 public class DatabaseTableHistory {
@@ -66,6 +68,30 @@ public class DatabaseTableHistory {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+        }
+    }
+
+     public static void getHistoryData(String username, DefaultTableModel model) {
+        String query = """
+                        SELECT * FROM histories
+                        WHERE username = ?
+                        ORDER BY gameDate DESC
+                        """ ;
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, username);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    model.addRow(new Object[]{
+                        resultSet.getString("gameDate"),
+                        resultSet.getString("result"),
+                        resultSet.getInt("totalScores"),
+                        resultSet.getInt("levelReached")
+                    });
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
     }
 }

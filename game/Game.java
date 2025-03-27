@@ -16,13 +16,15 @@ public class Game {
     public boolean gameRunning = false;
     public boolean gameRunningEachLevel = false;
     Scanner scanner;
-    Map map;
-    Pacman pacman;
-    ArrayList<Ghost> ghostList;
-    int currentLevel = 1;
+    public Map map;
+    public Pacman pacman;
+    public ArrayList<Ghost> ghostList;
+    int currentLevel;
     int maxLevel = 5;
     int ghostMultiplier = 3;
     String gameResult;
+
+    public Game() {};
 
     public Game(Scanner mainScanner) {
         this.scanner = mainScanner;

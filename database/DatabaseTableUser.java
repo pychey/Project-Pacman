@@ -1,11 +1,15 @@
 package database;
 
 import user.User;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+
+import javax.swing.table.DefaultTableModel;
 
 public class DatabaseTableUser{
     
@@ -155,4 +159,27 @@ public class DatabaseTableUser{
             System.out.println(e.getMessage());
         }
      }
+
+    public static void getLeaderboardData(DefaultTableModel model) {
+        String query = """
+                        SELECT * FROM users 
+                        ORDER BY highScore DESC
+                        """ ;
+        try (Connection connection = DriverManager.getConnection(url, user, pass);
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            int rank = 1;
+            while (resultSet.next()) {
+                model.addRow(new Object[]{
+                    rank++,
+                    resultSet.getString("username"),
+                    resultSet.getInt("highScore"),
+                    resultSet.getInt("totalWins"),
+                    resultSet.getInt("levelReached")
+                });
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }
