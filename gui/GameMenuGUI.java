@@ -19,6 +19,7 @@ public class GameMenuGUI extends JFrame {
         setSize(1100, 700);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setLocationRelativeTo(pFrame);
+        setVisible(true);
         
         JPanel mainPanel = new JPanel();
         mainPanel.setLayout(new GridLayout(0, 1));

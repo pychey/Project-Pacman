@@ -140,8 +140,7 @@ public class LoginRegisterGUI extends JFrame {
     }
 
     private void openGameMenu(User userPlaying) {
-        GameMenuGUI gameMenu = new GameMenuGUI(this, userPlaying);
+        new GameMenuGUI(this, userPlaying);
         this.dispose();
-        gameMenu.setVisible(true);
     }
 }

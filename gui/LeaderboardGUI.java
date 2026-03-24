@@ -15,7 +15,7 @@ public class LeaderboardGUI extends JFrame {
         setTitle("Pacman Leaderboard");
         setSize(1000, 600);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(pFrame);
 
         JLabel titleLabel = new JLabel("Pacman Leaderboard", SwingConstants.CENTER);
         titleLabel.setFont(new Font("Arial", Font.BOLD, 20));
@@ -26,6 +26,7 @@ public class LeaderboardGUI extends JFrame {
         JTable leaderboardTable = new JTable(model);
         leaderboardTable.setRowHeight(25);
         leaderboardTable.getTableHeader().setFont(new Font("Arial", Font.BOLD, 14));
+        leaderboardTable.setEnabled(false);
 
         JScrollPane scrollPane = new JScrollPane(leaderboardTable);
 
@@ -35,7 +36,6 @@ public class LeaderboardGUI extends JFrame {
             new GameMenuGUI(this,currentUser).setVisible(true); 
         });
 
-        // Layout
         setLayout(new BorderLayout());
         add(titleLabel, BorderLayout.NORTH);
         add(scrollPane, BorderLayout.CENTER);
